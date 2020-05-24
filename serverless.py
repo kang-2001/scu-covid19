@@ -48,7 +48,7 @@ def get_daily(s: requests.Session):
 
 
 def submit(s: requests.Session, old: dict):
-new_daily = {
+    new_daily = {
         'realname': old['realname'],    #姓名
         'number': old['number'],        #学工号
         'sfzx': old['sfzx'],            #是否在校
