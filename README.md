@@ -57,7 +57,7 @@ ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 使用腾讯云的云函数打卡的计算量和调用量极低，不会收费。
 
 # 说明
-显示打卡成功后，微信里的提交按钮还是可以点击的状态。手动打卡显示已经填报，不太明白哪个量记录了此状态，有待进一步观察。
+显示打卡成功后，微信里的提交按钮还是可以点击的状态。手动打卡显示已经填报，不影响使用。
 
 # 跋
 
@@ -68,7 +68,7 @@ ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 - 2020年4月15日 添加了随机等待`10-600`秒之后再进行填报
 - 2020年4月15日 添加了`user-agent`
 - 2020年4月15日 更新了README，添加了设定secrets页面的截图
-- 2020年7月1日 更新了代码，适配新的打卡选项。
+- 2020年7月 1日 更新了serverless的代码，适配新的打卡选项。
 
 # 致谢
 - 感谢 [karuboniru](https://github.com/IanSmith123/ucas-covid19/pull/1) 提供的github actions 支持
