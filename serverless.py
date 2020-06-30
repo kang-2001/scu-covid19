@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 """
-author: Les1ie, HyperMn
+author: Les1ie, HyperMn, syaoranwe
 mail: me@les1ie.com
 license: CC BY-NC-SA 3.0
 """
@@ -32,6 +32,8 @@ def login(s: requests.Session, username, password):
         print(r.text)
         print("登录失败")
         exit(1)
+    else:
+        print("登录成功")
 
 
 def get_daily(s: requests.Session):
@@ -40,7 +42,6 @@ def get_daily(s: requests.Session):
     j = daily.json()
     d = j.get('d', None)
     if d:
-
         return daily.json()['d']
     else:
         print("获取昨日信息失败")
@@ -52,27 +53,42 @@ def submit(s: requests.Session, old: dict):
         'realname': old['realname'],    #姓名
         'number': old['number'],        #学工号
         'sfzx': old['sfzx'],            #是否在校
-        'ismoved': old['ismoved'],      #？所在地点
+        # 'ismoved': old['ismoved'],      #是否和前一天同城
+        'ismoved': 0,  # 如果前一天位置变化这个值会为1，第二天仍然获取到昨天的1，而事实上位置是没变化的，所以置0
         'tw': old['tw'],                #体温
-        'sftjwh': old['sftjwh'],        #是否途经武汉
-        'sftjhb': old['sftjhb'],        #是否途经湖北
         'sfcxtz': old['sfcxtz'],        #是否出现体征？
-        'sfjcwhry': old['sfjcwhry'],    #是否接触武汉人员
-        'sfjchbry': old['sfjchbry'],    #是否接触湖北人员
-        'sfjcbh': old['sfjcbh'],        #是否接触病患 ？疑似/确诊人群
-        'sfcyglq': old['sfcyglq'],      #是否处于隔离期？
-        "sfjxhsjc": old['sfjxhsjc'],    #是否进行核酸检查
+        'sfyyjc':old['sfyyjc'],        #是否到医院检查
+        'jcjgqr':old['jcjgqr'],        #检查结果属于以下哪种情况
+        'jcjg':old['jcjg'],        #观察或诊疗情况&检查结果
+        'sfcyglq':old['sfcyglq'],        #是否处于观察期
+        'gllx':old['gllx'],        #观察场所 即隔离类型
+        'glksrq':old['glksrq'],        #观察（隔离）开始时间
+        'jcbhlx':old['jcbhlx'],        #接触（病患）人群类型
+        'jcbhrq':old['jcbhrq'],        #接触（病患）日期
+        'fxyy':old['fxyy'],        #返校原因
+        # 'bztcyy':old['bztcyy'],        #不和前一天同城原因，由于脚本沿用旧数据，并不会造成位置变化，所以不提交此字段
+        'szgj':old['szgj'],        #所在国家
+        'szcs':old['szcs'],        #所在城市
+        'sfjcbh': old['sfjcbh'],        #是否接触无症状感染/疑似/确诊人群（病患）
+        'sfcyglq': old['sfcyglq'],      #是否处于隔离/观察期？
+        'sfjxhsjc': old['sfjxhsjc'],    #4月8号以后是否进行核酸检测
+        'hsjcrq':old['hsjcrq'],        #核酸检测日期
+        'hsjcdd':old['hsjcdd'],        #核酸检测地点
+        'hsjcjg':old['hsjcjg'],        #核酸检测结果
+        'zgfxdq':old['zgfxdq'],        #今日是否在中高风险地区
+        'mjry':old['mjry'],        #今日是否接触密接人员
+        'csmjry':old['csmjry'],        #近14日内本人/共同居住者是否去过疫情发生场所（市场、单位、小区等）或与场所人员有过密切接触
         'sfcxzysx': old['sfcxzysx'],    #是否出现值得注意的情况？
-        'szsqsfybl': old['szsqsfybl'],
-        'sfsqhzjkk': old['sfsqhzjkk'],
-        'sfygtjzzfj': old['sfygtjzzfj'],
-        'hsjcjg': old['hsjcjg'],
-        'old_szdd': old['old_szdd'],        #所在地点
-        'sfsfbh': old['sfsfbh'],            #是否？？病患
-        'geo_api_info': old['old_city'],
-        'old_city': old['old_city'],
-        'geo_api_infot': old['geo_api_infot'],
-        'date': datetime.now(tz=pytz.timezone("Asia/Shanghai")).strftime("%Y-%m-%d"),
+        'qksm':old['qksm'],        #情况说明（值得注意的情况）
+        'remark':old['remark'],        #其他信息（最底端文字）
+        'old_szdd': old['old_szdd'],        #昨天所在地点
+        'geo_api_info': old['old_city'],    #行政区域api结果,采用昨天的数据中的“历史所在城市”
+        'old_city': old['old_city'],        #历史所在城市，沿用
+        'old_sfzx':old['old_sfzx'],        #昨天是否在校，沿用
+        'old_szgj':old['old_szgj'],        #昨天所在国家，沿用
+        'jcjgt':old['jcjgt'],        #昨天的观察或诊疗情况&检查结果
+        'geo_api_infot': old['geo_api_infot'],     #历史行政区域api结果，沿用
+        'date': datetime.now(tz=pytz.timezone("Asia/Shanghai")).strftime("%Y-%m-%d"),    #打卡日期
         'app_id': 'scu'}
 
     r = s.post("https://wfw.scu.edu.cn/ncov/api/default/save", data=new_daily)
